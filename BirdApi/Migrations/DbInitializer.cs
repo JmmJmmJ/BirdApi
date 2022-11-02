@@ -11,24 +11,42 @@ namespace BirdApi.Migrations
             {
                 if (context.Birds.Any()) return;
 
-                var birds = new List<Bird>
-            { new Bird
-            { Species = "Eurasian magpie",
-            Binomial_name = "Pica Pica",
-            },
-            new Bird
-            { Species = "Hooded crow",
-            Binomial_name = "Corvus Corone Cornix",
-            }
+            var birds = new List<Bird>
+            { 
+                new Bird
+                { Species = "Eurasian magpie",
+                Binomial_name = "Pica Pica",
+                },
+                new Bird
+                { Species = "Hooded crow",
+                Binomial_name = "Corvus Corone Cornix",
+                }
+             };
+
+                context.AddRange(birds);
+                context.SaveChanges();
+
+            var sightings = new List<Sighting>
+            { 
+                new Sighting
+                {           
+                Date = "12-11-2022",
+                Place = "Suomi",
+                Comment = "Pihassa",
+                BirdId = 1
+                },
+                new Sighting
+                {
+                Date = "09-10-2022",
+                Place = "Suomi",
+                Comment = "Puistossa",
+                BirdId = 2
+                },
             };
 
-                foreach (var bird in birds)
-                {
-                    context.Birds.Add(bird);
-                }
-
-                context.SaveChanges();
-            }
+            context.AddRange(sightings);
+            context.SaveChanges();
+        }
         }
 
 }

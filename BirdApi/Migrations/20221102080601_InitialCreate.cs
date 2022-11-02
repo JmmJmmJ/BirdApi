@@ -4,7 +4,7 @@
 
 namespace BirdApi.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,12 +21,31 @@ namespace BirdApi.Migrations
                 {
                     table.PrimaryKey("PK_Birds", x => x.BirdId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Sighting",
+                columns: table => new
+                {
+                    SightingId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Date = table.Column<string>(type: "TEXT", nullable: true),
+                    Comment = table.Column<string>(type: "TEXT", nullable: true),
+                    Place = table.Column<string>(type: "TEXT", nullable: true),
+                    BirdId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sighting", x => x.SightingId);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Birds");
+
+            migrationBuilder.DropTable(
+                name: "Sighting");
         }
     }
 }

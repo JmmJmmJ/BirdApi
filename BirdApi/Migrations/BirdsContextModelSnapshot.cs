@@ -32,6 +32,29 @@ namespace BirdApi.Migrations
 
                     b.ToTable("Birds");
                 });
+
+            modelBuilder.Entity("BirdsApi.Models.Sighting", b =>
+                {
+                    b.Property<int>("SightingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BirdId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Place")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SightingId");
+
+                    b.ToTable("Sighting");
+                });
 #pragma warning restore 612, 618
         }
     }

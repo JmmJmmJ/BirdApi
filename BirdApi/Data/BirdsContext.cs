@@ -11,6 +11,8 @@ namespace BirdsApi.Data
             }
 
         public DbSet<Bird> Birds { get; set; } = null!;
+
+        public DbSet<Sighting> Sighting { get; set; }
         }
 
 }
