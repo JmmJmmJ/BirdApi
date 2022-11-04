@@ -15,11 +15,11 @@ namespace BirdApi.Migrations
             { 
                 new Bird
                 { Species = "Eurasian magpie",
-                Binomial_name = "Pica Pica",
+                Binomial_name = "Pica pica",
                 },
                 new Bird
                 { Species = "Hooded crow",
-                Binomial_name = "Corvus Corone Cornix",
+                Binomial_name = "Corvus corone cornix",
                 }
              };
 

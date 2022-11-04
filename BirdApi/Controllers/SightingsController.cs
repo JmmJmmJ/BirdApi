@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BirdsApi.Data;
 using BirdsApi.Models;
+using BirdApi.DTOs;
+using BirdApi.Extensions;
 
 namespace BirdApi.Controllers
 {
@@ -22,10 +24,14 @@ namespace BirdApi.Controllers
         }
 
         // GET: api/Sightings
+        // change to use DTO
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sighting>>> GetSighting()
+        public async Task<ActionResult<IEnumerable<SightingDto>>> GetSighting()
         {
-            return await _context.Sighting.ToListAsync();
+            return await _context.Sighting
+                .Include(s => s.Bird)
+                .Select(s => s.ToDto())
+                .ToListAsync();
         }
 
         // GET: api/Sightings/5
