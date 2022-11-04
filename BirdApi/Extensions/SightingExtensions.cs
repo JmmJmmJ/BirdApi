@@ -17,6 +17,7 @@ namespace BirdApi.Extensions
                 Comment = sighting.Comment,
                 Place = sighting.Place,
                 BirdSpecies = sighting.Bird.Species,
+                BirdId = sighting.BirdId
             };
         }
     }

@@ -24,7 +24,6 @@ namespace BirdApi.Controllers
         }
 
         // GET: api/Sightings
-        // change to use DTO
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SightingDto>>> GetSighting()
         {
@@ -36,23 +35,26 @@ namespace BirdApi.Controllers
 
         // GET: api/Sightings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Sighting>> GetSighting(int id)
+        public async Task<ActionResult<SightingDto>> GetSighting(int id)
         {
-            var sighting = await _context.Sighting.FindAsync(id);
+            var sighting = await _context.Sighting.Include(s => s.Bird)
+                .FirstOrDefaultAsync(s => s.SightingId == id);
 
             if (sighting == null)
             {
                 return NotFound();
             }
 
-            return sighting;
+            return sighting.ToDto();
         }
 
         [HttpGet("bird/{id}")]
-        public async Task<ActionResult<List<Sighting>>> GetSightingByBird(int id)
+        public async Task<ActionResult<List<SightingDto>>> GetSightingByBird(int id)
         {
             var sightings = await _context.Sighting
+                .Include(s => s.Bird)
                 .Where(x => x.BirdId == id)
+                .Select(s => s.ToDto())
                 .ToListAsync();
 
             if (sightings == null)
@@ -65,44 +67,39 @@ namespace BirdApi.Controllers
 
         // PUT: api/Sightings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSighting(int id, Sighting sighting)
+        [HttpPut]
+        public async Task<IActionResult> PutSighting(SightingDtoUpdate sightingDto)
         {
-            if (id != sighting.SightingId)
-            {
-                return BadRequest();
-            }
+            var sighting = await _context.Sighting.FindAsync(sightingDto.Id);
 
-            _context.Entry(sighting).State = EntityState.Modified;
+            if (sighting == null) return NotFound();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SightingExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            sighting.BirdId = sightingDto.BirdId;
+            sighting.Date = sightingDto.Date;
+            sighting.Place = sightingDto.Place;
+            sighting.Comment = sightingDto.Comment;
 
-            return NoContent();
+            await _context.SaveChangesAsync();
+
+            return Ok(sighting);
         }
 
         // POST: api/Sightings
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Sighting>> PostSighting(Sighting sighting)
+        public async Task<ActionResult<Sighting>> PostSighting(SightingDtoCreate sightingDto)
         {
+            var sighting = new Sighting
+            {
+                BirdId = sightingDto.BirdId,
+                Date = sightingDto.Date,
+                Comment = sightingDto.Comment,
+                Place = sightingDto.Place,
+            };
             _context.Sighting.Add(sighting);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSighting", new { id = sighting.SightingId }, sighting);
+            return CreatedAtAction(nameof(GetSighting), new { id = sighting.SightingId}, sighting);
         }
 
         // DELETE: api/Sightings/5
