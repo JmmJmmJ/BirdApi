@@ -7,12 +7,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BirdApi.Extensions;
 using BirdApi.DTOs;
+using BirdApi.Controllers;
 
 namespace BirdsAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BirdsController : ControllerBase
+    public class BirdsController : BaseApiController
     {
         private readonly BirdsContext _context;
 

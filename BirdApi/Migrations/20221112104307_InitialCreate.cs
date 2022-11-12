@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -28,7 +29,7 @@ namespace BirdApi.Migrations
                 {
                     SightingId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Date = table.Column<string>(type: "TEXT", nullable: true),
+                    Date = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     Comment = table.Column<string>(type: "TEXT", nullable: true),
                     Place = table.Column<string>(type: "TEXT", nullable: true),
                     BirdId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -36,16 +37,27 @@ namespace BirdApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sighting", x => x.SightingId);
+                    table.ForeignKey(
+                        name: "FK_Sighting_Birds_BirdId",
+                        column: x => x.BirdId,
+                        principalTable: "Birds",
+                        principalColumn: "BirdId",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sighting_BirdId",
+                table: "Sighting",
+                column: "BirdId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Birds");
+                name: "Sighting");
 
             migrationBuilder.DropTable(
-                name: "Sighting");
+                name: "Birds");
         }
     }
 }

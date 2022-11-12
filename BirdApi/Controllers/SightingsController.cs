@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BirdsApi.Data;
 using BirdsApi.Models;
 using BirdApi.DTOs;
 using BirdApi.Extensions;
+using System;
 
 namespace BirdApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SightingsController : ControllerBase
+    public class SightingsController : BaseApiController
     {
         private readonly BirdsContext _context;
 
@@ -74,8 +71,10 @@ namespace BirdApi.Controllers
 
             if (sighting == null) return NotFound();
 
+            if (!DateOnly.TryParse(sightingDto.Date, out DateOnly result)) return ValidationProblem();
+
             sighting.BirdId = sightingDto.BirdId;
-            sighting.Date = sightingDto.Date;
+            sighting.Date = result;
             sighting.Place = sightingDto.Place;
             sighting.Comment = sightingDto.Comment;
 
@@ -89,10 +88,12 @@ namespace BirdApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Sighting>> PostSighting(SightingDtoCreate sightingDto)
         {
+            if (!DateOnly.TryParse(sightingDto.Date, out DateOnly result)) return ValidationProblem();
+
             var sighting = new Sighting
             {
                 BirdId = sightingDto.BirdId,
-                Date = sightingDto.Date,
+                Date = result,
                 Comment = sightingDto.Comment,
                 Place = sightingDto.Place,
             };

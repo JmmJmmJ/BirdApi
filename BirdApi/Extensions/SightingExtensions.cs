@@ -13,7 +13,7 @@ namespace BirdApi.Extensions
             return new SightingDto
             {
                 Id = sighting.SightingId,
-                Date = sighting.Date,
+                Date = sighting.Date.ToString(),
                 Comment = sighting.Comment,
                 Place = sighting.Place,
                 BirdSpecies = sighting.Bird.Species,

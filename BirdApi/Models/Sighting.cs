@@ -6,7 +6,7 @@ namespace BirdsApi.Models
     public class Sighting
     {
         public int SightingId { get; set; }
-        public string Date { get; set; }
+        public DateOnly Date { get; set; }
         public string Comment { get; set; }
         public string Place { get; set; }
 
