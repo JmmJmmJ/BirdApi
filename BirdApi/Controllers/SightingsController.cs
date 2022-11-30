@@ -101,7 +101,7 @@ namespace BirdApi.Controllers
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return CreatedAtAction(nameof(GetSighting), sightingDto);
+            if (result) return CreatedAtAction(nameof(GetSighting), new { id = sighting.SightingId }, sightingDto);
 
             return BadRequest(new ProblemDetails { Title = "Problem adding sighting" });
         }
