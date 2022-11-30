@@ -86,21 +86,24 @@ namespace BirdApi.Controllers
         // POST: api/Sightings
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Sighting>> PostSighting(SightingDtoCreate sightingDto)
+        public async Task<ActionResult<SightingDto>> PostSighting(SightingDtoCreate sightingDto)
         {
-            if (!DateOnly.TryParse(sightingDto.Date, out DateOnly result)) return ValidationProblem();
+            if (!DateOnly.TryParse(sightingDto.Date, out DateOnly resultD)) return ValidationProblem();
 
             var sighting = new Sighting
             {
                 BirdId = sightingDto.BirdId,
-                Date = result,
+                Date = resultD,
                 Comment = sightingDto.Comment,
                 Place = sightingDto.Place,
             };
             _context.Sighting.Add(sighting);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSighting), new { id = sighting.SightingId}, sighting);
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return CreatedAtAction(nameof(GetSighting), sightingDto);
+
+            return BadRequest(new ProblemDetails { Title = "Problem adding sighting" });
         }
 
         // DELETE: api/Sightings/5
