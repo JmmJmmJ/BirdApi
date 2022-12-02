@@ -80,7 +80,7 @@ namespace BirdApi.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(sighting);
+            return Ok(sightingDto);
         }
 
         // POST: api/Sightings
