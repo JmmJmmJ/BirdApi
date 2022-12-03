@@ -37,6 +37,23 @@ namespace BirdsAPI.Controllers
             return Ok(bird.ToDto());
         }
 
+        [HttpGet("{id}/sightings")]
+        public async Task<ActionResult<List<SightingDto>>> GetSightingByBird(int id)
+        {
+            var sightings = await _context.Sighting
+                .Include(s => s.Bird)
+                .Where(x => x.BirdId == id)
+                .Select(s => s.ToDto())
+                .ToListAsync();
+
+            if (sightings == null)
+            {
+                return NotFound();
+            }
+
+            return sightings;
+        }
+
 
     }
 

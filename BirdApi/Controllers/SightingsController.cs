@@ -45,23 +45,6 @@ namespace BirdApi.Controllers
             return sighting.ToDto();
         }
 
-        [HttpGet("bird/{id}")]
-        public async Task<ActionResult<List<SightingDto>>> GetSightingByBird(int id)
-        {
-            var sightings = await _context.Sighting
-                .Include(s => s.Bird)
-                .Where(x => x.BirdId == id)
-                .Select(s => s.ToDto())
-                .ToListAsync();
-
-            if (sightings == null)
-            {
-                return NotFound();
-            }
-
-            return sightings;
-        }
-
         // PUT: api/Sightings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
