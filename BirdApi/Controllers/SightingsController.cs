@@ -8,16 +8,21 @@ using BirdsApi.Models;
 using BirdApi.DTOs;
 using BirdApi.Extensions;
 using System;
+using BirdApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BirdApi.Controllers
 {
     public class SightingsController : BaseApiController
     {
         private readonly BirdsContext _context;
+        public readonly UserManager<User> _userManager;
 
-        public SightingsController(BirdsContext context)
+        public SightingsController(BirdsContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Sightings
@@ -68,13 +73,17 @@ namespace BirdApi.Controllers
 
         // POST: api/Sightings
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<SightingDto>> PostSighting(SightingDtoCreate sightingDto)
         {
             if (!DateOnly.TryParse(sightingDto.Date, out DateOnly resultD)) return ValidationProblem();
 
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
             var sighting = new Sighting
             {
+                OwnerID = user.Id,
                 BirdId = sightingDto.BirdId,
                 Date = resultD,
                 Comment = sightingDto.Comment,

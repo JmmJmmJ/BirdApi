@@ -3,6 +3,7 @@ using System;
 using BirdsApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,12 +11,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BirdApi.Migrations
 {
     [DbContext(typeof(BirdsContext))]
-    partial class BirdsContextModelSnapshot : ModelSnapshot
+    [Migration("20221205124548_IdentityAdded")]
+    partial class IdentityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
 
             modelBuilder.Entity("BirdApi.Models.User", b =>
                 {
@@ -113,9 +115,6 @@ namespace BirdApi.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("OwnerID")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Place")
                         .HasColumnType("TEXT");
 
@@ -154,15 +153,15 @@ namespace BirdApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c88e52f3-2afa-4b03-9321-ba25dd247d3a",
-                            ConcurrencyStamp = "f5011465-fa3d-40b1-a4d3-49a28a0d41a8",
+                            Id = "f7e6f4d3-c14d-4560-b2b9-380c2acdfbbb",
+                            ConcurrencyStamp = "913367e3-1649-4c3f-9b94-a29dda4439a0",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
-                            Id = "27896df1-ad84-4dca-9066-d91eafc06ff8",
-                            ConcurrencyStamp = "803caae2-beeb-4c67-9db2-31b191fcaf78",
+                            Id = "d75ccf86-654b-4766-ac1b-6e47e77b3053",
+                            ConcurrencyStamp = "2360ed7b-7ca4-408f-9aac-fb5cc35fe302",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

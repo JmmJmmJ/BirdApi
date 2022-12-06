@@ -1,15 +1,39 @@
-﻿using global::BirdsApi.Data;
+﻿using BirdApi.Models;
+using global::BirdsApi.Data;
 using global::BirdsApi.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BirdApi.Migrations
 {
         public static class DbInitializer
         {
-            public static void Initialize(BirdsContext context)
+            public static async Task Initialize(BirdsContext context, UserManager<User> userManager)
             {
+
+            if (!userManager.Users.Any())
+            {
+                var user = new User
+                {
+                    UserName = "test",
+                    Email = "test@test.com"
+                };
+                await userManager.CreateAsync(user, "t3stPass#");
+                await userManager.AddToRoleAsync(user, "Member");
+
+                var admin = new User
+                {
+                    UserName = "admin",
+                    Email = "admin@test.com"
+                };
+                await userManager.CreateAsync(admin, "t3stPass#");
+                await userManager.AddToRolesAsync(admin, new[] { "Member", "Admin" });
+
+            }
+
                 if (context.Birds.Any()) return;
 
             var birds = new List<Bird>

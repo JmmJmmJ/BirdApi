@@ -5,6 +5,8 @@ namespace BirdsApi.Models
 {
     public class Sighting
     {
+        public string OwnerID { get; set; }
+
         public int SightingId { get; set; }
         public DateOnly Date { get; set; }
         public string Comment { get; set; }
