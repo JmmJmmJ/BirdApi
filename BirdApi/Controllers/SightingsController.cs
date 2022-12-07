@@ -50,14 +50,36 @@ namespace BirdApi.Controllers
             return sighting.ToDto();
         }
 
+        // GET: api/Sightings
+        [Authorize]
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<SightingDto>>> GetSightingByUser()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            return await _context.Sighting
+                .Include(s => s.Bird)
+                .Where(s => s.OwnerID == user.Id)
+                .Select(s => s.ToDto())
+                .ToListAsync();
+        }
+
         // PUT: api/Sightings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> PutSighting(SightingDtoUpdate sightingDto)
         {
             var sighting = await _context.Sighting.FindAsync(sightingDto.Id);
 
             if (sighting == null) return NotFound();
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            if (user.Id != sighting.OwnerID)
+            {
+                return NotFound();
+            }
 
             if (!DateOnly.TryParse(sightingDto.Date, out DateOnly result)) return ValidationProblem();
 
@@ -99,11 +121,19 @@ namespace BirdApi.Controllers
         }
 
         // DELETE: api/Sightings/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSighting(int id)
         {
             var sighting = await _context.Sighting.FindAsync(id);
             if (sighting == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            if (user.Id != sighting.OwnerID)
             {
                 return NotFound();
             }
