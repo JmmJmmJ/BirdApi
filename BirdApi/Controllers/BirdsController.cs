@@ -24,6 +24,7 @@ namespace BirdsAPI.Controllers
         public async Task<ActionResult<List<BirdDto>>> GetBirds()
         {
             return await _context.Birds
+                .Include(b => b.Sightings)
                 .Select(b => b.ToDto())
                 .ToListAsync();
         }

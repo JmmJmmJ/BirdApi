@@ -15,6 +15,8 @@ namespace BirdApi.Extensions
                 Id = bird.BirdId,
                 Species = bird.Species,
                 Binomial_name = bird.Binomial_name,
+                Conservation_status = bird.Conservation_status,
+                sightingsTotal = bird.Sightings.Count,
             };
         }
     }

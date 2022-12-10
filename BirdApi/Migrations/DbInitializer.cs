@@ -39,22 +39,27 @@ namespace BirdApi.Migrations
             var birds = new List<Bird>
             { 
                 new Bird
-                { Species = "Eurasian magpie",
+                { Species = "Harakka",
                 Binomial_name = "Pica pica",
+                Conservation_status = "LC"
                 },
                 new Bird
-                { Species = "Hooded crow",
+                { Species = "Varis",
                 Binomial_name = "Corvus corone cornix",
+                Conservation_status = "LC"
                 }
              };
 
                 context.AddRange(birds);
                 context.SaveChanges();
 
+            var testUser = await userManager.FindByNameAsync("test");
+
             var sightings = new List<Sighting>
             {
                 new Sighting
                 {
+                OwnerID = testUser.Id,
                 Date = new DateOnly(2022, 11, 12),
                 Place = "Suomi",
                 Comment = "Pihassa",
@@ -62,6 +67,7 @@ namespace BirdApi.Migrations
                 },
                 new Sighting
                 {
+                OwnerID = testUser.Id,
                 Date = new DateOnly(2022, 10, 9),
                 Place = "Suomi",
                 Comment = "Puistossa",
